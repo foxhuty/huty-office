@@ -317,6 +317,6 @@ def id_info_download(filename):
 
 
 if __name__ == '__main__':
-    pool.submit(app.run)
-    # app.run()
+    # pool.submit(app.run)
+    app.run(host='0.0.0.0')
 
