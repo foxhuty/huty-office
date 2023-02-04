@@ -612,7 +612,7 @@ class ScoreAnalysis(object):
                 self.df_science['总分'] <= total_science + 20)
         df_line_arts = self.df_arts.loc[line_condition, :]
         df_line_science = self.df_science.loc[line_condition_science, :]
-        writer = pd.ExcelWriter(r'D:\成绩统计结果\本次考试踩线生分班名单.xlsx')
+        writer = pd.ExcelWriter('/data/results/本次考试踩线生分班名单.xlsx')
         class_num = list(df_line_arts['班级'].drop_duplicates())
         class_num_science = list(df_line_science['班级'].drop_duplicates())
         for i in class_num:
@@ -639,7 +639,7 @@ class ScoreAnalysis(object):
         self.class_rank()
         class_No_arts = list(self.df_arts['班级'].drop_duplicates())
         class_NO_science = list(self.df_science['班级'].drop_duplicates())
-        writer = pd.ExcelWriter(r'D:\成绩统计结果\本次考试文理各班成绩表.xlsx')
+        writer = pd.ExcelWriter(r'/data/results/本次考试文理各班成绩表.xlsx')
         for i in class_No_arts:
             class_arts = self.df_arts[self.df_arts['班级'] == i].reset_index(drop=True)
             class_arts['序号'] = [k + 1 for k in class_arts.index]
@@ -882,7 +882,7 @@ class ScoreAnalysis(object):
     def file_name_by_time(data_df):
         file_time = time.time()
         file_name = f'{file_time}.xlsx'
-        data_df.to_excel('D:\\成绩统计结果\\' + file_name, sheet_name='成绩分析', index=False)
+        data_df.to_excel('/data/results/' + file_name, sheet_name='成绩分析', index=False)
         return file_name
 
     @staticmethod
@@ -945,8 +945,8 @@ class ScoreAnalysis(object):
 
     @staticmethod
     def make_directory():
-        if not os.path.exists('D:\\成绩统计结果'):
-            os.makedirs('D:\\成绩统计结果')
+        if not os.path.exists('/data/results'):
+            os.makedirs('/data/results')
 
 
 class JuniorExam(object):
@@ -1395,7 +1395,7 @@ class ExamRoom(object):
         df_science.reset_index(drop=True, inplace=True)
 
         file_name = self.filename_by_time()
-        writer = pd.ExcelWriter('D:\\成绩统计结果\\' + file_name)
+        writer = pd.ExcelWriter('/data/results/' + file_name)
         df_room_students = []
         df_room_students_science = []
         arts = pd.DataFrame(columns=df_arts.columns)
@@ -1492,7 +1492,7 @@ class ExamRoom(object):
             df_room_students.append((idx, room_number, df_room_student))
 
         file_name = self.filename_by_time()
-        writer = pd.ExcelWriter('D:\\成绩统计结果\\' + file_name)
+        writer = pd.ExcelWriter('/data/results/' + file_name)
 
         for idx, room_number, df_room_student in df_room_students:
             for i in df_room_student.index:
@@ -1574,7 +1574,7 @@ class ExamInvigilators(object):
         """
         df_room = self.invigilation_table()
         file_name = self.get_file_name()
-        writer = pd.ExcelWriter('D:\\成绩统计结果\\' + file_name)
+        writer = pd.ExcelWriter('/data/results/' + file_name)
         df_room.to_excel(writer, sheet_name='监考安排表')
         teachers = df_room.values
         teacher_dict = {}
@@ -1598,7 +1598,7 @@ class ExamInvigilators(object):
                                        invigilation_df['监考次数'].sum()]
         invigilation_df.to_excel(writer, sheet_name='监考次数统计')
         writer.close()
-        result_file = 'D:\\成绩统计结果\\' + file_name
+        result_file = '/data/results/' + file_name
         final_file = os.path.basename(result_file)
 
         return final_file
@@ -1626,7 +1626,7 @@ class SplitClass(object):
             class_number['序号'] = [k + 1 for k in class_number.index]
             whole_df = pd.concat([whole_df, class_number])
         filename = ExamRoom.filename_by_time()
-        writer = pd.ExcelWriter('D:\\成绩统计结果\\' + filename)
+        writer = pd.ExcelWriter('/data/results/' + filename)
         whole_df.to_excel(writer, sheet_name='班级序号表', index=False)
         # final_file = os.path.basename(writer)
         writer.close()
@@ -1668,7 +1668,7 @@ class CatalogueCourses(object):
         class_count = self.get_course_data(data)
         courses = data.columns[3:].tolist()
         filename = ExamRoom.filename_by_time()
-        writer = pd.ExcelWriter('D:\\成绩统计结果\\' + filename)
+        writer = pd.ExcelWriter('/data/results/' + filename)
         class_count.to_excel(writer, sheet_name='汇总统计表', index=False)
         for i in range(len(courses)):
             new_data = data.loc[data[courses[i]].notnull(),
@@ -1691,7 +1691,7 @@ class GetInfoFromId(object):
         :param region:
         :return:
         """
-        filename = r'./static/id_region.xlsx'
+        filename = './static/id_region.xlsx'
         data = pd.read_excel(filename, sheet_name=0, dtype={'cityNo': str,
                                                             'districtNo': str,
                                                             'provinceNo': str})
@@ -1786,7 +1786,7 @@ class GetInfoFromId(object):
             data.insert(loc=0, column='序号', value=1)
         data['序号'] = [str(i + 1) for i in data.index]
         filename = ExamRoom.filename_by_time()
-        data.to_excel('D:\\成绩统计结果\\' + filename, index=False)
+        data.to_excel('/data/results/' + filename, index=False)
         show_data = data.loc[:,
                     ['序号', '姓名', '身份证号', '性别', '年龄', '出生日期', '所在区域', '所属省份', '地区']]
         return filename, bad_df, id_bad, show_data

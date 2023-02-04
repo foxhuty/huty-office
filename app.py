@@ -15,7 +15,7 @@ pool = ThreadPoolExecutor(10)
 
 app = Flask(__name__)
 
-root_dir = r'D:\成绩统计结果'
+root_dir = '/data/results'
 
 
 def del_files(file_dir):
